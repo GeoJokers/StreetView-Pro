@@ -1,41 +1,82 @@
 # StreetView Pro
 
-A lightweight QGIS plugin for opening Google Street View directly from the map canvas with customizable heading and direction.
+Open Google Street View directly from the QGIS map canvas with an animated hanging Pegman cursor, customizable heading, and smart right-click tools.
 
 ![QGIS Version](https://img.shields.io/badge/QGIS-3.0+-green.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Version](https://img.shields.io/badge/version-1.0-orange.svg)
+![Version](https://img.shields.io/badge/version-2.0-orange.svg)
+
+---
 
 ## Overview
 
-StreetView Pro allows you to quickly access Google Street View from any location on your QGIS map. Simply click to open Street View, or drag to set a specific viewing direction. The plugin features an intuitive interface with visual feedback and right-click menu integration for enhanced workflow efficiency.
+StreetView Pro is a lightweight and interactive QGIS plugin that allows you to instantly open Google Street View from any map location.
 
-### Visual Guide
+With a smooth hanging Pegman cursor similar to Google Maps, you can click or drag to define the viewing direction, copy coordinates or Street View URLs, and seamlessly return to your workflow.
 
-![Cover Page](docs/images/Cover%20Page.png)
+Designed for GIS professionals, photogrammetrists, surveyors, and map editors who need quick field verification and visual reference.
 
-![Key Features](docs/images/Key%20Features.png)
+---
 
-![Toolbar, Message & Icon](docs/images/Toolbar,%20message%20&%20icon.png)
+## Key Features (v2.0)
 
-![Right Click](docs/images/Right%20Click.png)
+1. **Click or Drag to Open Street View**  
+   Single click for instant view or drag to define custom heading.
+
+2. **Directional Control with Visual Arrow**  
+   A dynamic direction line with arrow shows the exact viewing angle.
+
+3. **Animated Hanging Pegman Cursor**  
+   Replaces the static camera icon with a Google-Maps-style Pegman.
+
+4. **Dynamic Pegman Tilt Animation**  
+   Pegman tilts left/right based on movement direction and speed.
+
+5. **Right-Click Quick Access**  
+   - Open Street View at clicked location  
+   - Copy coordinates (X, Y format)  
+   - Copy full Street View URL  
+
+6. **Automatic Tool Reset**  
+   Returns to the default selection tool after opening Street View.
+
+7. **Full CRS Support**  
+   Works with any project CRS and automatically transforms to WGS84.
+
+8. **ESC Key Cancelation**  
+   Cancel operation instantly without opening Street View.
+
+9. **Dedicated StreetView Pro Toolbar**  
+   Easy activation with clear message bar instructions.
+
 ---
 
 ## Installation
 
 ### From QGIS Plugin Repository (Recommended)
+
 1. Open QGIS  
 2. Go to `Plugins` → `Manage and Install Plugins`  
-3. Search for **"StreetView Pro"**  
+3. Search for **StreetView Pro**  
 4. Click **Install Plugin**
 
+---
+
 ### Manual Installation
-1. Download the latest release from [GitHub Releases](https://github.com/md-moinul-mobin/StreetView-Pro/releases)  
+
+1. Download the latest release from GitHub  
 2. Extract the ZIP file  
-3. Copy the `StreetView Pro` folder to your QGIS plugins directory:
-   - **Windows:** `C:\Users\YourUsername\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\`
-   - **macOS:** `~/Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins/`
-   - **Linux:** `~/.local/share/QGIS/QGIS3/profiles/default/python/plugins/`
+3. Copy the `StreetView Pro` folder to:
+
+**Windows**  
+`C:\Users\YourUsername\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\`
+
+**macOS**  
+`~/Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins/`
+
+**Linux**  
+`~/.local/share/QGIS/QGIS3/profiles/default/python/plugins/`
+
 4. Restart QGIS  
 5. Enable the plugin from `Plugins` → `Manage and Install Plugins`
 
@@ -43,56 +84,70 @@ StreetView Pro allows you to quickly access Google Street View from any location
 
 ## Usage
 
-### Basic Usage - Click & Drag
-1. Click the **StreetView Pro** icon in the toolbar  
-2. **Single Click** on the map to open Street View at that location with default heading (North)  
-3. **Click and Drag** to set a specific viewing direction — the cyan line shows where you'll be looking  
-4. Release to open Google Street View in your browser  
+### Basic Workflow
 
-### Context Menu (Right-Click)
-Right-click anywhere on the map to access quick actions:
-- **Open Street View Here** — Opens Street View at clicked location with default heading  
-- **Copy Coordinate** — Copies coordinates in your project's CRS (X, Y format with 1 decimal)  
-- **Copy Street View URL** — Copies the full Google Street View URL to clipboard  
+1. Click the **StreetView Pro** toolbar icon  
+2. Move the hanging Pegman over the map  
+3. **Single Click** → Opens Street View with default heading  
+4. **Click & Drag** → Set custom viewing direction  
+5. Release mouse → Street View opens in your default browser  
 
-### Keyboard Shortcuts
-- **ESC** — Cancel the current operation and return to selection mode  
+After opening, the plugin automatically switches back to the selection tool.
 
 ---
 
-## Requirements
+### Right-Click Options
 
-- QGIS 3.0 or higher  
-- Internet connection (to access Google Street View)  
-- Web browser  
+Right-click anywhere on the map canvas to:
+
+- Open Street View at that location  
+- Copy coordinates (X, Y format)  
+- Copy full Google Street View URL  
+
+---
+
+### Keyboard Shortcut
+
+- **ESC** → Cancel and exit StreetView mode
 
 ---
 
 ## Technical Details
 
 - **Plugin Name:** StreetView Pro  
-- **Version:** 1.0  
-- **QGIS Minimum Version:** 3.0  
-- **License:** MIT  
+- **Version:** 2.0  
+- **Minimum QGIS Version:** 3.0  
+- **Maximum QGIS Version:** 3.99  
 - **Category:** Web  
+- **License:** MIT  
 - **Language:** Python  
 
-### How It Works
-1. Captures click/drag events on the QGIS map canvas  
-2. Calculates heading angle from drag direction  
-3. Transforms coordinates from project CRS to WGS84 (required by Google Maps)  
-4. Constructs Google Street View URL with coordinates, heading, pitch, and FOV  
-5. Opens URL in default web browser  
+---
+
+## How It Works
+
+1. Captures click and drag events from the QGIS map canvas  
+2. Calculates heading from drag direction  
+3. Transforms coordinates from project CRS to WGS84  
+4. Builds a Google Street View URL with heading parameters  
+5. Opens the URL in the default web browser  
 
 ---
 
 ## Changelog
 
-### Version 1.0 (2025-10-09)
+### Version 2.0 – Hanging Pegman Cursor Update
+
+- Replaced static camera cursor with animated hanging Pegman  
+- Added dynamic tilt animation based on movement  
+- Improved visual interaction and user experience  
+- Enhanced overall usability and workflow smoothness  
+
+### Version 1.0
+
 - Initial release  
-- Click or drag to open Street View with direction  
+- Click or drag to open Street View  
 - Right-click context menu integration  
-- Custom cursor and visual direction indicators  
 - CRS support with auto WGS84 transformation  
 - ESC key cancellation  
 - Auto return to selection mode  
@@ -101,50 +156,46 @@ Right-click anywhere on the map to access quick actions:
 
 ## Contributing
 
-Contributions are welcome! Please follow these steps:
+Contributions are welcome.
 
 1. Fork the repository  
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)  
-3. Commit your changes (`git commit -m 'Add amazing feature'`)  
-4. Push to the branch (`git push origin feature/amazing-feature`)  
+2. Create a feature branch  
+3. Commit your changes  
+4. Push to your branch  
 5. Open a Pull Request  
 
 ---
 
-## Issues
+## Issues & Feature Requests
 
-Found a bug or have a feature request? Please open an issue on [GitHub Issues](https://github.com/md-moinul-mobin/StreetView-Pro/issues).
-
----
-
-## License
-
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+Found a bug or want to suggest an improvement?  
+Open an issue on GitHub.
 
 ---
 
 ## Author
 
 **MD Moinul Mobin**  
-- Email: [mdmoinulmobin@gmail.com](mailto:mdmoinulmobin@gmail.com)  
-- GitHub: [@md-moinul-mobin](https://github.com/md-moinul-mobin)
+GIS Specialist  
+Email: mdmoinulmobin@gmail.com  
+GitHub: https://github.com/md-moinul-mobin/StreetView-Pro  
 
 ---
 
-## Acknowledgments
+## License
 
-- Thanks to the QGIS community for their excellent documentation  
-- Inspired by the need for quick Street View access during field verification workflows  
+This project is licensed under the MIT License.
 
 ---
 
 ## Support
 
-If you find this plugin helpful, please:
-- ⭐ Star the repository on GitHub  
-- 🐛 Report bugs or request features via [Issues](https://github.com/md-moinul-mobin/StreetView-Pro/issues)  
-- 📢 Share it with others who might find it useful  
+If you find this plugin useful:
+
+- Star the repository  
+- Share it with colleagues  
+- Submit feedback or suggestions  
 
 ---
 
-**Note:** This plugin uses Google Street View service. Please ensure you comply with Google's Terms of Service when using this plugin.
+**Note:** This plugin opens Google Street View in your browser. Please ensure compliance with Google’s Terms of Service when using Street View data.

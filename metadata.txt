@@ -1,0 +1,32 @@
+[general]
+name=StreetView Pro
+description=Open Google Street View directly from QGIS map canvas with a hanging pegman cursor, customizable heading and direction.
+version=2.0
+qgisMinimumVersion=3.0
+qgisMaximumVersion=3.99
+author=MD Moinul Mobin
+email=mdmoinulmobin@gmail.com
+icon=streetviewpro.png
+category=Web
+tags=streetview,google,maps,navigation,web,viewer,panorama,gis,mapviewer,coordinate,photoviewer,streetimagery,streetphoto,360view,googleimagery,earthview,google-earth,openstreetmap,google-streetview,openstreetview,copystreetviewurl
+homepage=https://github.com/md-moinul-mobin/StreetView-Pro
+repository=https://github.com/md-moinul-mobin/StreetView-Pro
+tracker=https://github.com/md-moinul-mobin/StreetView-Pro/issues
+license=MIT
+about=StreetView Pro v2.0 Plugin - Key Features:
+  1. Click or drag on map canvas to open Google Street View directly.
+  2. Drag to set viewing direction - a direction line with arrow shows the heading.
+  3. Hanging pegman cursor similar to Google Maps native Street View experience.
+  4. Pegman cursor dynamically tilts left/right based on movement direction and speed.
+  5. Right-click anywhere to open Street View at that location.
+  6. Right-click to copy coordinates (X, Y format) to clipboard.
+  7. Right-click to copy Street View URL to clipboard.
+  8. Automatically returns to selection tool after Street View opens.
+  9. Works with any project CRS, auto-transforms to WGS84 for Street View.
+  10. ESC key to cancel without opening Street View.
+  11. A dedicated StreetView Pro Toolbar for easy access.
+  12. Message bar instructions shown when tool is activated.
+experimental=False
+deprecated=False
+changelog=2.0 - Hanging Pegman Cursor
+    - Replaced camera icon cursor with an animated hanging pegman cursor similar to Google Maps.
