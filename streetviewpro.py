@@ -210,17 +210,17 @@ class PointTool(QgsMapTool):
         self.arrow = None
         
         # Load 11 cursor icons
-        self.cursor_left5 = self.load_cursor('left5.png')
-        self.cursor_left4 = self.load_cursor('left4.png')
-        self.cursor_left3 = self.load_cursor('left3.png')
-        self.cursor_left2 = self.load_cursor('left2.png')
-        self.cursor_left1 = self.load_cursor('left1.png')
-        self.cursor_center = self.load_cursor('center.png')
-        self.cursor_right1 = self.load_cursor('right1.png')
-        self.cursor_right2 = self.load_cursor('right2.png')
-        self.cursor_right3 = self.load_cursor('right3.png')
-        self.cursor_right4 = self.load_cursor('right4.png')
-        self.cursor_right5 = self.load_cursor('right5.png')
+        self.cursor_left5 = self.load_cursor('assets/left5.png')
+        self.cursor_left4 = self.load_cursor('assets/left4.png')
+        self.cursor_left3 = self.load_cursor('assets/left3.png')
+        self.cursor_left2 = self.load_cursor('assets/left2.png')
+        self.cursor_left1 = self.load_cursor('assets/left1.png')
+        self.cursor_center = self.load_cursor('assets/center.png')
+        self.cursor_right1 = self.load_cursor('assets/right1.png')
+        self.cursor_right2 = self.load_cursor('assets/right2.png')
+        self.cursor_right3 = self.load_cursor('assets/right3.png')
+        self.cursor_right4 = self.load_cursor('assets/right4.png')
+        self.cursor_right5 = self.load_cursor('assets/right5.png')
         
         # Current cursor state
         self.current_cursor = self.cursor_center
