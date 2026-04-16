@@ -70,12 +70,18 @@ Designed for GIS professionals, photogrammetrists, surveyors, and map editors wh
 
 **Windows**  
 `C:\Users\YourUsername\AppData\Roaming\QGIS\QGIS3\profiles\default\python\plugins\`
+or
+`C:\Users\YourUsername\AppData\Roaming\QGIS\QGIS4\profiles\default\python\plugins\`
 
 **macOS**  
 `~/Library/Application Support/QGIS/QGIS3/profiles/default/python/plugins/`
+or
+`~/Library/Application Support/QGIS/QGIS4/profiles/default/python/plugins/`
 
 **Linux**  
 `~/.local/share/QGIS/QGIS3/profiles/default/python/plugins/`
+or
+`~/.local/share/QGIS/QGIS4/profiles/default/python/plugins/`
 
 4. Restart QGIS  
 5. Enable the plugin from `Plugins` → `Manage and Install Plugins`
@@ -117,7 +123,8 @@ Right-click anywhere on the map canvas to:
 - **Plugin Name:** StreetView Pro  
 - **Version:** 2.0  
 - **Minimum QGIS Version:** 3.0  
-- **Maximum QGIS Version:** 3.99  
+- **Maximum QGIS Version:** 4.99  
+- **Qt Compatibility:** Qt5 (QGIS 3) and Qt6 (QGIS 4)  
 - **Category:** Web  
 - **License:** MIT  
 - **Language:** Python  

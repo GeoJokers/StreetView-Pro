@@ -10,6 +10,51 @@ import math
 import webbrowser
 
 
+def _qt_enum_compat(*candidates):
+    """Return a Qt enum value compatible with different Qt5/Qt6 enum layouts."""
+    for candidate in candidates:
+        value = Qt
+        found = True
+
+        for path_part in candidate:
+            if not hasattr(value, path_part):
+                found = False
+                break
+            value = getattr(value, path_part)
+
+        if found:
+            return value
+
+    raise AttributeError("No compatible Qt enum value found for: {}".format(candidates))
+
+
+QT_CUSTOM_CONTEXT_MENU = _qt_enum_compat(
+    ("CustomContextMenu",),
+    ("ContextMenuPolicy", "CustomContextMenu"),
+)
+QT_KEEP_ASPECT_RATIO = _qt_enum_compat(
+    ("KeepAspectRatio",),
+    ("AspectRatioMode", "KeepAspectRatio"),
+)
+QT_SMOOTH_TRANSFORMATION = _qt_enum_compat(
+    ("SmoothTransformation",),
+    ("TransformationMode", "SmoothTransformation"),
+)
+QT_CROSS_CURSOR = _qt_enum_compat(
+    ("CrossCursor",),
+    ("CursorShape", "CrossCursor"),
+)
+QT_RIGHT_BUTTON = _qt_enum_compat(
+    ("RightButton",),
+    ("MouseButton", "RightButton"),
+)
+QT_KEY_ESCAPE = _qt_enum_compat(
+    ("Key_Escape",),
+    ("Key", "Escape"),
+    ("Key", "Key_Escape"),
+)
+
+
 class StreetViewPro:
 
     def __init__(self, iface):
@@ -44,18 +89,33 @@ class StreetViewPro:
         canvas = self.iface.mapCanvas()
         
         if self.qgis_version < 33000:
-            canvas.setContextMenuPolicy(Qt.CustomContextMenu)
+            canvas.setContextMenuPolicy(QT_CUSTOM_CONTEXT_MENU)
             canvas.customContextMenuRequested.connect(self.show_context_menu_modern)
         else:
             try:
                 canvas.contextMenuAboutToShow.connect(self.add_context_menu_items)
             except AttributeError:
-                canvas.setContextMenuPolicy(Qt.CustomContextMenu)
+                canvas.setContextMenuPolicy(QT_CUSTOM_CONTEXT_MENU)
                 canvas.customContextMenuRequested.connect(self.show_context_menu_modern)
+
+    def _exec_menu(self, menu, global_point):
+        """Qt6 uses exec(), while older Qt versions use exec_()."""
+        if hasattr(menu, "exec"):
+            menu.exec(global_point)
+        else:
+            menu.exec_(global_point)
         
-    def add_context_menu_items(self, menu, event):
-        """Original context menu method for QGIS 3.34+"""
-        point = self.iface.mapCanvas().getCoordinateTransform().toMapCoordinates(event.pos())
+    def add_context_menu_items(self, *args):
+        """Context menu callback compatible with multiple QGIS signal signatures."""
+        if len(args) >= 2:
+            menu, event = args[0], args[1]
+            point = self.iface.mapCanvas().getCoordinateTransform().toMapCoordinates(event.pos())
+        elif len(args) == 1:
+            menu = args[0]
+            canvas_pos = self.iface.mapCanvas().mapFromGlobal(QCursor.pos())
+            point = self.iface.mapCanvas().getCoordinateTransform().toMapCoordinates(canvas_pos)
+        else:
+            return
         
         action1 = QAction("Open Street View Here", menu)
         action1.triggered.connect(lambda: self.open_streetview_at_point(point))
@@ -90,7 +150,7 @@ class StreetViewPro:
         menu.addAction(action3)
         
         global_point = self.iface.mapCanvas().mapToGlobal(point)
-        menu.exec_(global_point)
+        self._exec_menu(menu, global_point)
         
     def open_streetview_at_point(self, point):
         """Open Street View at the given point with default heading"""
@@ -235,6 +295,13 @@ class PointTool(QgsMapTool):
         self.animation_timer = QTimer()
         self.animation_timer.timeout.connect(self.update_cursor)
         self.animation_timer.start(50)  # Update every 50ms
+
+    def _exec_menu(self, menu, global_point):
+        """Qt6 uses exec(), while older Qt versions use exec_()."""
+        if hasattr(menu, "exec"):
+            menu.exec(global_point)
+        else:
+            menu.exec_(global_point)
         
     def load_cursor(self, filename):
         """Load a cursor icon from file"""
@@ -247,8 +314,8 @@ class PointTool(QgsMapTool):
             cursor_pixmap = cursor_pixmap.scaled(
                 desired_size, 
                 desired_size, 
-                Qt.KeepAspectRatio, 
-                Qt.SmoothTransformation
+                QT_KEEP_ASPECT_RATIO,
+                QT_SMOOTH_TRANSFORMATION
             )
             
             # Set hotspot at top-center for hanging effect
@@ -257,7 +324,7 @@ class PointTool(QgsMapTool):
             return QCursor(cursor_pixmap, hotspot_x, hotspot_y)
         else:
             # Fallback to cross cursor
-            return QCursor(Qt.CrossCursor)
+            return QCursor(QT_CROSS_CURSOR)
     
     def calculate_velocity(self, current_pos):
         """Calculate cursor velocity"""
@@ -335,7 +402,7 @@ class PointTool(QgsMapTool):
         y = event.pos().y()
         
         # Handle right-click separately
-        if event.button() == Qt.RightButton:
+        if event.button() == QT_RIGHT_BUTTON:
             self.show_context_menu(event.pos())
             return
         
@@ -370,7 +437,7 @@ class PointTool(QgsMapTool):
         
         # Show menu at cursor position
         global_point = self.canvas.mapToGlobal(pos)
-        menu.exec_(global_point)
+        self._exec_menu(menu, global_point)
     
     def open_streetview_at_point(self, point):
         """Open Street View at the given point with default heading"""
@@ -541,7 +608,7 @@ class PointTool(QgsMapTool):
             self.iface.actionSelect().trigger()
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Escape:
+        if event.key() == QT_KEY_ESCAPE:
             self.cleanup()
             self.action.setChecked(False)
             self.canvas.unsetMapTool(self)
@@ -549,13 +616,13 @@ class PointTool(QgsMapTool):
 
     def cleanup(self):
         if self.rl:
-            self.rl.reset()
+            self.rl.reset(QgsWkbTypes.LineGeometry)
             self.rl = None
         if self.rb:
-            self.rb.reset()
+            self.rb.reset(QgsWkbTypes.PointGeometry)
             self.rb = None
         if self.arrow:
-            self.arrow.reset()
+            self.arrow.reset(QgsWkbTypes.LineGeometry)
             self.arrow = None
         
         self.pressed = False
